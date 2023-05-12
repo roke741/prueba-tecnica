@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Facturacion</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  
+</head>
+<body>
+  <div class="container">
+    <h1>Comprobantes</h1>
+    <a class="btn btn-primary" href="crear-comprobante.html">Crear comprobante</a>
+    <table class="table" id="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+  <script>
+    fetch('http://127.0.0.1:8080/api/detalles')
+    .then(function(response) {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Error en la petición');
+    })
+    .then(function(data) {
+      // Obtener la referencia del elemento de la tabla en HTML
+      var tableBody = document.getElementById('table').getElementsByTagName('tbody')[0];
+      // Recorrer los datos y construir las filas de la tabla
+      data.forEach(function(detalles) {
+        // Crear una nueva fila en la tabla
+        var newRow = tableBody.insertRow();
+        // Insertar las celdas en la fila
+        var idCell = newRow.insertCell();
+        idCell.appendChild(document.createTextNode(detalles.cabeceraComprobante.idCabecera));
+        var fechaCell = newRow.insertCell();
+        fechaCell.appendChild(document.createTextNode(detalles.cabeceraComprobante.fecha));
+        var clienteCell = newRow.insertCell();
+        clienteCell.appendChild(document.createTextNode(detalles.cabeceraComprobante.cliente));
+        var totalCell = newRow.insertCell();
+        totalCell.appendChild(document.createTextNode(detalles.cabeceraComprobante.total));
+        var productoCell = newRow.insertCell();
+        productoCell.appendChild(document.createTextNode(detalles.producto));
+        var cantidadCell = newRow.insertCell();
+        cantidadCell.appendChild(document.createTextNode(detalles.cantidad));
+        var precioCell = newRow.insertCell();
+        precioCell.appendChild(document.createTextNode(detalles.precio));
+        
+
+
+        var accionesCell = newRow.insertCell();
+        var editarButton = document.createElement('button');
+        editarButton.textContent = 'Editar';
+        editarButton.className = 'btn btn-warning mx-1'
+        editarButton.addEventListener('click', function() {
+          // Lógica para editar la cabecera correspondiente
+          console.log('Editar cabecera con ID:', detalles.cabeceraComprobante.idCabecera);
+        });
+        accionesCell.appendChild(editarButton);
+
+        var eliminarButton = document.createElement('a');
+        eliminarButton.textContent = 'Eliminar';
+        eliminarButton.className = 'btn btn-danger mx-1'
+        eliminarButton.addEventListener('click', function() {
+          // Lógica para eliminar la cabecera correspondiente
+          console.log('Eliminar cabecera con ID:', detalles.cabeceraComprobante.idCabeceraa);
+        });
+        accionesCell.appendChild(eliminarButton);
+      });
+    })
+    .catch(function(error) {
+      // Manejar el error
+      console.error(error);
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+</body>
+</html>
